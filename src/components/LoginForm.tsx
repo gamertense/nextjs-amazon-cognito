@@ -1,49 +1,38 @@
 // components/LoginForm.tsx
 import React, { useState } from "react";
-import { signIn, MfaChallenge } from "../services/auth";
-import MfaVerificationForm from "./MfaVerificationForm";
 
-const LoginForm = () => {
+interface LoginFormProps {
+  onLoginSuccess: (email: string, password: string) => Promise<void>;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [mfaChallenge, setMfaChallenge] = useState<MfaChallenge | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
     try {
-      const result = await signIn(email, password);
-
-      // Check if result is a token (string) or MFA challenge (object)
-      if (typeof result === "string") {
-        // Login successful - result is the JWT token
-        console.log("Login successful! Token:", result);
-        // Save token and redirect user
-        localStorage.setItem("token", result);
-        window.location.href = "/home";
-      } else {
-        // MFA required - show verification code input
-        setMfaChallenge(result);
-        console.log("MFA Required:", result.challengeName);
-      }
+      await onLoginSuccess(email, password);
     } catch (error) {
       console.error("Login failed:", error);
-      alert("Login failed. Please check your credentials.");
+      setError("Login failed. Please check your credentials.");
     } finally {
       setLoading(false);
     }
   };
 
-  // If MFA challenge exists, show verification form
-  if (mfaChallenge) {
-    return <MfaVerificationForm mfaChallenge={mfaChallenge} />;
-  }
-
-  // Otherwise, show login form
   return (
     <form onSubmit={handleLogin} className="space-y-4">
+      {error && (
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+          <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+        </div>
+      )}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
           Email

@@ -4,15 +4,15 @@ import { submitMfaCode, MfaChallenge } from "../services/auth";
 import {
   isExpiredCodeError,
   isCognitoCodeMismatchError,
-  isUserDisabledError,
   isNotAuthorizedError,
 } from "../types/cognito-errors";
 
 interface Props {
   mfaChallenge: MfaChallenge;
+  onSuccess?: () => void;
 }
 
-const MfaVerificationForm: React.FC<Props> = ({ mfaChallenge }) => {
+const MfaVerificationForm: React.FC<Props> = ({ mfaChallenge, onSuccess }) => {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,7 +26,8 @@ const MfaVerificationForm: React.FC<Props> = ({ mfaChallenge }) => {
 
     try {
       const token = await submitMfaCode(
-        mfaChallenge.cognitoUser,
+        mfaChallenge.email,
+        mfaChallenge.password,
         code,
         mfaChallenge.challengeName
       );
@@ -38,7 +39,11 @@ const MfaVerificationForm: React.FC<Props> = ({ mfaChallenge }) => {
       // Save token and redirect after a brief delay
       setTimeout(() => {
         localStorage.setItem("token", token);
-        window.location.href = "/home?mfa=true";
+        if (onSuccess) {
+          onSuccess();
+        } else {
+          window.location.href = "/home?mfa=true";
+        }
       }, 2000);
     } catch (error: unknown) {
       console.error("Verification failed:", error);

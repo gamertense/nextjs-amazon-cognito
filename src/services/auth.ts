@@ -4,8 +4,8 @@ import { userPool } from "../config/cognito";
 
 // Define types for MFA challenge
 export interface MfaChallenge {
-  cognitoUser: CognitoUser;
-  authenticationDetails: AuthenticationDetails;
+  email: string;
+  password: string;
   challengeName: "SMS_MFA" | "SOFTWARE_TOKEN_MFA";
   challengeParameters: {
     CODE_DELIVERY_DELIVERY_MEDIUM?: string;
@@ -42,9 +42,9 @@ export const signIn = (
       // MFA Required: SMS code will be sent
       mfaRequired: (challengeName, challengeParameters) => {
         resolve({
-          cognitoUser,
-          authenticationDetails,
-          challengeName,
+          email,
+          password,
+          challengeName: "SMS_MFA" as const,
           challengeParameters,
         });
       },
@@ -52,9 +52,9 @@ export const signIn = (
       // TOTP Required: User must use authenticator app
       totpRequired: (challengeName, challengeParameters) => {
         resolve({
-          cognitoUser,
-          authenticationDetails,
-          challengeName,
+          email,
+          password,
+          challengeName: "SOFTWARE_TOKEN_MFA" as const,
           challengeParameters,
         });
       },
@@ -68,25 +68,68 @@ export const signIn = (
 };
 
 export const submitMfaCode = (
-  cognitoUser: CognitoUser,
+  email: string,
+  password: string,
   code: string,
   mfaType?: "SMS_MFA" | "SOFTWARE_TOKEN_MFA"
 ): Promise<string> => {
   return new Promise((resolve, reject) => {
-    cognitoUser.sendMFACode(
-      code,
-      {
-        onSuccess: (session) => {
-          // Verification successful - return JWT token
-          const token = session.getIdToken().getJwtToken();
-          resolve(token);
-        },
-        onFailure: (err) => {
-          reject(err);
-        },
+    // Recreate authentication details and user
+    const authenticationDetails = new AuthenticationDetails({
+      Username: email,
+      Password: password,
+    });
+
+    const cognitoUser = new CognitoUser({
+      Username: email,
+      Pool: userPool,
+    });
+
+    // Restart authentication to get into MFA state
+    cognitoUser.authenticateUser(authenticationDetails, {
+      onSuccess: (session) => {
+        // Shouldn't happen, but handle it
+        const token = session.getIdToken().getJwtToken();
+        resolve(token);
       },
-      mfaType // Optional: specify MFA type
-    );
+      mfaRequired: () => {
+        // Now send the MFA code
+        cognitoUser.sendMFACode(
+          code,
+          {
+            onSuccess: (session) => {
+              // Verification successful - return JWT token
+              const token = session.getIdToken().getJwtToken();
+              resolve(token);
+            },
+            onFailure: (err) => {
+              reject(err);
+            },
+          },
+          mfaType
+        );
+      },
+      totpRequired: () => {
+        // Now send the MFA code for TOTP
+        cognitoUser.sendMFACode(
+          code,
+          {
+            onSuccess: (session) => {
+              // Verification successful - return JWT token
+              const token = session.getIdToken().getJwtToken();
+              resolve(token);
+            },
+            onFailure: (err) => {
+              reject(err);
+            },
+          },
+          mfaType
+        );
+      },
+      onFailure: (err) => {
+        reject(err);
+      },
+    });
   });
 };
 
