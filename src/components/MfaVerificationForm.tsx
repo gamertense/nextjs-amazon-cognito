@@ -38,7 +38,7 @@ const MfaVerificationForm: React.FC<Props> = ({ mfaChallenge }) => {
       // Save token and redirect after a brief delay
       setTimeout(() => {
         localStorage.setItem("token", token);
-        window.location.href = "/home";
+        window.location.href = "/home?mfa=true";
       }, 2000);
     } catch (error: unknown) {
       console.error("Verification failed:", error);

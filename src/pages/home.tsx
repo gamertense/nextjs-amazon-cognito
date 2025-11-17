@@ -44,6 +44,9 @@ export default function HomePage() {
     );
   }
 
+  // Check if user authenticated with 2FA via query parameter
+  const used2FA = router.query.mfa === "true";
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
       <main className="w-full max-w-2xl p-8">
@@ -53,7 +56,9 @@ export default function HomePage() {
             Welcome! 🎉
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            You&apos;ve successfully authenticated with 2FA
+            {used2FA
+              ? "You've successfully authenticated with 2FA"
+              : "You've successfully logged in"}
           </p>
         </div>
 
@@ -81,7 +86,9 @@ export default function HomePage() {
                   Authentication Successful!
                 </p>
                 <p className="text-green-600 dark:text-green-400 text-sm mt-1">
-                  Your account is protected with Two-Factor Authentication
+                  {used2FA
+                    ? "Your account is protected with Two-Factor Authentication"
+                    : "You are now logged in"}
                 </p>
               </div>
             </div>
@@ -112,14 +119,6 @@ export default function HomePage() {
                 </span>{" "}
                 <span className="text-blue-600 dark:text-blue-400">
                   {userEmail}
-                </span>
-              </div>
-              <div>
-                <span className="text-blue-700 dark:text-blue-300 font-medium">
-                  Status:
-                </span>{" "}
-                <span className="text-blue-600 dark:text-blue-400">
-                  Authenticated
                 </span>
               </div>
             </div>
