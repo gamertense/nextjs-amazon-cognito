@@ -1,6 +1,12 @@
 // components/MfaVerificationForm.tsx
 import React, { useState } from "react";
 import { submitMfaCode, MfaChallenge } from "../services/auth";
+import {
+  isExpiredCodeError,
+  isCognitoCodeMismatchError,
+  isUserDisabledError,
+  isNotAuthorizedError,
+} from "../types/cognito-errors";
 
 interface Props {
   mfaChallenge: MfaChallenge;
@@ -9,10 +15,14 @@ interface Props {
 const MfaVerificationForm: React.FC<Props> = ({ mfaChallenge }) => {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
+    setSuccess(false);
 
     try {
       const token = await submitMfaCode(
@@ -23,12 +33,33 @@ const MfaVerificationForm: React.FC<Props> = ({ mfaChallenge }) => {
 
       console.log("Verification successful! Token:", token);
 
-      // Save token and redirect
-      localStorage.setItem("token", token);
-      window.location.href = "/home";
-    } catch (error) {
+      setSuccess(true);
+
+      // Save token and redirect after a brief delay
+      setTimeout(() => {
+        localStorage.setItem("token", token);
+        window.location.href = "/home";
+      }, 2000);
+    } catch (error: unknown) {
       console.error("Verification failed:", error);
-      alert("Invalid code. Please try again.");
+
+      // Extract user-friendly error message
+      let errorMessage = "Invalid code. Please try again.";
+
+      if (isExpiredCodeError(error)) {
+        errorMessage =
+          "This code has already been used. Please wait for a new code from your authenticator app.";
+      } else if (isCognitoCodeMismatchError(error)) {
+        errorMessage =
+          "Invalid verification code. Please check your code and try again.";
+      } else if (isNotAuthorizedError(error)) {
+        errorMessage = "Invalid session. Please log in again.";
+      } else {
+        errorMessage = "Something went wrong";
+      }
+
+      setError(errorMessage);
+      setCode("");
     } finally {
       setLoading(false);
     }
@@ -36,6 +67,46 @@ const MfaVerificationForm: React.FC<Props> = ({ mfaChallenge }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {success && (
+        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+          <div className="flex items-start">
+            <svg
+              className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5 mr-3 flex-shrink-0"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <p className="text-sm text-green-800 dark:text-green-200 font-medium">
+              Verification successful! Redirecting...
+            </p>
+          </div>
+        </div>
+      )}
+
+      {error && (
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+          <div className="flex items-start">
+            <svg
+              className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 mr-3 flex-shrink-0"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+          </div>
+        </div>
+      )}
+
       <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
         <p className="text-sm text-blue-800 dark:text-blue-200">
           {mfaChallenge.challengeName === "SMS_MFA"
@@ -62,10 +133,10 @@ const MfaVerificationForm: React.FC<Props> = ({ mfaChallenge }) => {
 
       <button
         type="submit"
-        disabled={loading}
+        disabled={loading || success}
         className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
       >
-        {loading ? "Verifying..." : "Verify Code"}
+        {loading ? "Verifying..." : success ? "Success!" : "Verify Code"}
       </button>
     </form>
   );
