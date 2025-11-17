@@ -1,76 +1,143 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import { useState } from "react";
+import LoginForm from "../components/LoginForm";
+import AuthenticatorSetup from "../components/AuthenticatorSetup";
+import VerifyAuthenticator from "../components/VerifyAuthenticator";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+type View = "login" | "setup" | "verify";
 
 export default function Home() {
+  const [currentView, setCurrentView] = useState<View>("login");
+
   return (
-    <div
-      className={`${geistSans.className} ${geistMono.className} flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black`}
-    >
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the index.tsx file.
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+      <main className="w-full max-w-md p-8">
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
+            AWS Cognito 2FA Demo
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-gray-600 dark:text-gray-400">
+            Authentication & Setup
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs/pages/getting-started?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Main Content Card */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8">
+          {currentView === "login" && (
+            <div>
+              <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
+                Sign In
+              </h2>
+              <LoginForm />
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Need to set up 2FA?
+                </p>
+                <button
+                  onClick={() => setCurrentView("setup")}
+                  className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
+                >
+                  Configure Authenticator App
+                </button>
+              </div>
+            </div>
+          )}
+
+          {currentView === "setup" && (
+            <div>
+              <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
+                Setup Authenticator
+              </h2>
+              <AuthenticatorSetup />
+              <div className="mt-6 flex gap-4">
+                <button
+                  onClick={() => setCurrentView("verify")}
+                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Continue to Verification
+                </button>
+                <button
+                  onClick={() => setCurrentView("login")}
+                  className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                >
+                  Back to Login
+                </button>
+              </div>
+            </div>
+          )}
+
+          {currentView === "verify" && (
+            <div>
+              <h2 className="text-2xl font-semibold mb-6 text-gray-800 dark:text-white">
+                Verify Authenticator
+              </h2>
+              <VerifyAuthenticator />
+              <div className="mt-6">
+                <button
+                  onClick={() => setCurrentView("login")}
+                  className="w-full bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                >
+                  Back to Login
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Navigation Helper */}
+        <div className="mt-6 text-center">
+          <div className="inline-flex gap-2 bg-white dark:bg-gray-800 rounded-full px-4 py-2 shadow-md">
+            <button
+              onClick={() => setCurrentView("login")}
+              className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                currentView === "login"
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+              }`}
+            >
+              Login
+            </button>
+            <button
+              onClick={() => setCurrentView("setup")}
+              className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                currentView === "setup"
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+              }`}
+            >
+              Setup
+            </button>
+            <button
+              onClick={() => setCurrentView("verify")}
+              className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                currentView === "verify"
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+              }`}
+            >
+              Verify
+            </button>
+          </div>
+        </div>
+
+        {/* Info Section */}
+        <div className="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+          <h3 className="font-semibold text-gray-800 dark:text-white mb-2 text-sm">
+            Testing Guide:
+          </h3>
+          <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
+            <li>
+              • <strong>Login:</strong> Sign in with your credentials (redirects
+              to /home on success)
+            </li>
+            <li>
+              • <strong>Setup:</strong> Configure authenticator app
+              (Google/Microsoft Authenticator)
+            </li>
+            <li>
+              • <strong>Verify:</strong> Complete setup by verifying a TOTP code
+            </li>
+          </ul>
         </div>
       </main>
     </div>
