@@ -71,7 +71,7 @@ NEXT_PUBLIC_APP_NAME=YourAppName
 ```
 
 > **ทำไมต้องมี NEXT_PUBLIC**: ตัวแปรที่ต้องเข้าถึงจาก Browser ต้อง prefix นี้ครับ เพราะการ auth ของ Cognito ในตัวอย่างนี้เกิดฝั่ง client
-> **APP NAME (Issuer)**: `NEXT_PUBLIC_APP_NAME` จะไปโผล่ในแอป Authenticator ให้ผู้ใช้เห็นว่าโค้ดนี้ของระบบไหนครับ
+> **APP NAME (Issuer)**: `NEXT_PUBLIC_APP_NAME` จะไปโชว์ในแอป Authenticator ให้ผู้ใช้เห็นว่าโค้ดนี้ของระบบไหนครับ
 
 ---
 
@@ -686,13 +686,15 @@ export default VerifyAuthenticator;
 ในบทความนี้เราใช้ localStorage เพื่อให้เข้าใจง่าย แต่ production แนะนำ cookie แบบ httpOnly ฝั่ง server จะปลอดภัยกว่าเยอะครับ (กัน XSS ดูด token)
 
 ```typescript
-export const storeToken = (token: string) => {
-  document.cookie = `authToken=${token}; Secure; HttpOnly; SameSite=Strict; Max-Age=3600`;
-};
-
-export const clearToken = () => {
-  document.cookie = "authToken=; Secure; HttpOnly; SameSite=Strict; Max-Age=0";
-};
+// ✅ ใช้ API Route (server-side)
+// pages/api/auth/set-token.ts
+export default function handler(req, res) {
+  res.setHeader(
+    "Set-Cookie",
+    `authToken=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=3600`
+  );
+  res.status(200).json({ success: true });
+}
 ```
 
 **จำให้ขึ้นใจ:**

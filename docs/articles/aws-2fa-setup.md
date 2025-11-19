@@ -1,4 +1,4 @@
-## การตั้งค่า AWS Cognito MFA & SMS
+## การตั้งค่า Amazon Cognito MFA & SMS
 
 บทความนี้แบ่งเป็นสองส่วนหลัก ๆ ครับ:
 
@@ -113,5 +113,5 @@ Thank you for submitting your request to increase your SMS monthly spending limi
 
 **แหล่งอ้างอิง (References):**
 
-- [AWS Cognito User Pool Creation Guide](https://docs.aws.amazon.com/cognito/)
+- [Amazon Cognito User Pool Creation Guide](https://docs.aws.amazon.com/cognito/)
 - [AWS SNS SMS Sandbox Exit Process](https://docs.aws.amazon.com/sns/)
