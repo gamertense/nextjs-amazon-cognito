@@ -62,14 +62,14 @@ const AuthenticatorSetup: React.FC<AuthenticatorSetupProps> = ({
   if (step === "email") {
     return (
       <div>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+        <p className="text-sm text-gray-600 mb-4">
           Enter your email address to generate your authenticator QR code.
         </p>
         <form onSubmit={handleEmailSubmit} className="space-y-4">
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              className="block text-sm font-medium text-gray-700 mb-2"
             >
               Email Address
             </label>
@@ -81,7 +81,7 @@ const AuthenticatorSetup: React.FC<AuthenticatorSetupProps> = ({
               placeholder="user@example.com"
               required
               autoFocus
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
             />
           </div>
           <button
@@ -106,27 +106,27 @@ const AuthenticatorSetup: React.FC<AuthenticatorSetupProps> = ({
 
   return (
     <div className="space-y-6">
-      <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-        <p className="text-sm text-blue-800 dark:text-blue-200">
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <p className="text-sm text-blue-800">
           <strong>Email:</strong> {userEmail}
         </p>
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
-        <h3 className="font-semibold text-gray-800 dark:text-white mb-2 flex items-center">
+      <div className="bg-gray-50 rounded-lg p-4">
+        <h3 className="font-semibold text-gray-800 mb-2 flex items-center">
           <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">
             1
           </span>
           Download an Authenticator App
         </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-300 ml-8">
+        <p className="text-sm text-gray-600 ml-8">
           Download Google Authenticator, Microsoft Authenticator, or any
           TOTP-compatible app.
         </p>
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
-        <h3 className="font-semibold text-gray-800 dark:text-white mb-3 flex items-center">
+      <div className="bg-gray-50 rounded-lg p-4">
+        <h3 className="font-semibold text-gray-800 mb-3 flex items-center">
           <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">
             2
           </span>
@@ -139,16 +139,16 @@ const AuthenticatorSetup: React.FC<AuthenticatorSetupProps> = ({
             </div>
 
             <div className="mt-4">
-              <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+              <p className="text-sm text-gray-600 mb-2">
                 Or manually enter this secret key:
               </p>
               <div className="flex gap-2">
-                <code className="flex-1 bg-white dark:bg-gray-800 px-3 py-2 rounded border border-gray-300 dark:border-gray-600 text-sm break-all">
+                <code className="flex-1 bg-white px-3 py-2 rounded border border-gray-300 text-sm text-gray-600 break-all">
                   {secretKey}
                 </code>
                 <button
                   onClick={handleCopySecret}
-                  className="bg-gray-200 dark:bg-gray-600 px-4 py-2 rounded hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors text-sm font-medium"
+                  className="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 transition-colors text-sm text-black font-medium"
                 >
                   Copy
                 </button>
@@ -158,14 +158,14 @@ const AuthenticatorSetup: React.FC<AuthenticatorSetupProps> = ({
         )}
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
-        <h3 className="font-semibold text-gray-800 dark:text-white mb-2 flex items-center">
+      <div className="bg-gray-50 rounded-lg p-4">
+        <h3 className="font-semibold text-gray-800 mb-2 flex items-center">
           <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">
             3
           </span>
           Verify Setup
         </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-300 ml-8">
+        <p className="text-sm text-gray-600 ml-8">
           After scanning, click &quot;Continue to Verification&quot; below to
           complete the setup.
         </p>
@@ -182,7 +182,7 @@ const AuthenticatorSetup: React.FC<AuthenticatorSetupProps> = ({
           {onCancel && (
             <button
               onClick={onCancel}
-              className="w-full bg-gray-100 text-gray-700 py-2.5 px-4 rounded-lg hover:bg-gray-200 transition-colors font-medium dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+              className="w-full bg-gray-100 text-gray-700 py-2.5 px-4 rounded-lg hover:bg-gray-200 transition-colors font-medium"
             >
               Cancel
             </button>

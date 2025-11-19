@@ -38,7 +38,7 @@ export default function HomePage() {
   // Show loading while checking authentication
   if (isChecking) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
@@ -48,14 +48,12 @@ export default function HomePage() {
   const used2FA = router.query.mfa === "true";
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
       <main className="w-full max-w-2xl p-8">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-2">
-            Welcome! 🎉
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <h1 className="text-4xl font-bold text-gray-800 mb-2">Welcome! 🎉</h1>
+          <p className="text-gray-600">
             {used2FA
               ? "You've successfully authenticated with 2FA"
               : "You've successfully logged in"}
@@ -63,12 +61,12 @@ export default function HomePage() {
         </div>
 
         {/* Success Card */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 space-y-6">
-          <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6">
+        <div className="bg-white rounded-lg shadow-xl p-8 space-y-6">
+          <div className="bg-green-50 border border-green-200 rounded-lg p-6">
             <div className="flex items-center gap-3">
               <div className="flex-shrink-0">
                 <svg
-                  className="w-8 h-8 text-green-600 dark:text-green-400"
+                  className="w-8 h-8 text-green-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -82,10 +80,10 @@ export default function HomePage() {
                 </svg>
               </div>
               <div>
-                <p className="text-green-800 dark:text-green-200 font-semibold text-lg">
+                <p className="text-green-800 font-semibold text-lg">
                   Authentication Successful!
                 </p>
-                <p className="text-green-600 dark:text-green-400 text-sm mt-1">
+                <p className="text-green-600 text-sm mt-1">
                   {used2FA
                     ? "Your account is protected with Two-Factor Authentication"
                     : "You are now logged in"}
@@ -95,8 +93,8 @@ export default function HomePage() {
           </div>
 
           {/* User Info */}
-          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-            <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-3 flex items-center gap-2">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h3 className="font-semibold text-blue-900 mb-3 flex items-center gap-2">
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -114,19 +112,15 @@ export default function HomePage() {
             </h3>
             <div className="space-y-2 text-sm">
               <div>
-                <span className="text-blue-700 dark:text-blue-300 font-medium">
-                  Email:
-                </span>{" "}
-                <span className="text-blue-600 dark:text-blue-400">
-                  {userEmail}
-                </span>
+                <span className="text-blue-700 font-medium">Email:</span>{" "}
+                <span className="text-blue-600">{userEmail}</span>
               </div>
             </div>
           </div>
 
           {/* Token Display */}
-          <div className="bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -142,12 +136,12 @@ export default function HomePage() {
               </svg>
               JWT Token
             </h3>
-            <div className="bg-white dark:bg-gray-800 rounded p-3 overflow-x-auto">
-              <p className="text-xs text-gray-700 dark:text-gray-300 break-all font-mono">
+            <div className="bg-white rounded p-3 overflow-x-auto">
+              <p className="text-xs text-gray-700 break-all font-mono">
                 {token.substring(0, 80)}...
               </p>
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+            <p className="text-xs text-gray-500 mt-2">
               This token is stored in localStorage and used for API
               authentication
             </p>
@@ -178,8 +172,8 @@ export default function HomePage() {
         </div>
 
         {/* Info Banner */}
-        <div className="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
-          <h3 className="font-semibold text-gray-800 dark:text-white mb-2 text-sm flex items-center gap-2">
+        <div className="mt-6 bg-white rounded-lg shadow-md p-4">
+          <h3 className="font-semibold text-gray-800 mb-2 text-sm flex items-center gap-2">
             <svg
               className="w-4 h-4"
               fill="none"
@@ -195,7 +189,7 @@ export default function HomePage() {
             </svg>
             Protected Page
           </h3>
-          <p className="text-xs text-gray-600 dark:text-gray-400">
+          <p className="text-xs text-gray-600">
             This page is only accessible after successful authentication with
             2FA. Your session is managed via the JWT token stored in
             localStorage.
