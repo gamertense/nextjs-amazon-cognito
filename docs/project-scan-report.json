@@ -1,0 +1,113 @@
+{
+  "workflow_version": "1.2.0",
+  "timestamps": {
+    "started": "2025-11-19T00:00:00.000Z",
+    "last_updated": "2025-11-19T00:10:00.000Z",
+    "completed": "2025-11-19T00:10:00.000Z"
+  },
+  "mode": "initial_scan",
+  "scan_level": "deep",
+  "project_root": "/Users/jack/Training/nextjs-aws-2fa",
+  "output_folder": "/Users/jack/Training/nextjs-aws-2fa/docs",
+  "completed_steps": [
+    {
+      "step": "step_1",
+      "status": "completed",
+      "timestamp": "2025-11-19T00:01:00.000Z",
+      "summary": "Classified as monolith with 1 part"
+    },
+    {
+      "step": "step_2",
+      "status": "completed",
+      "timestamp": "2025-11-19T00:02:00.000Z",
+      "summary": "Found 2 existing docs (excluding article files per user request)"
+    },
+    {
+      "step": "step_3",
+      "status": "completed",
+      "timestamp": "2025-11-19T00:03:00.000Z",
+      "summary": "Tech stack: Next.js 16.0.3 on TypeScript 5.x with React 19.2.0"
+    },
+    {
+      "step": "step_4",
+      "status": "completed",
+      "timestamp": "2025-11-19T00:04:00.000Z",
+      "summary": "Conditional analysis complete - analyzed auth components, services, types"
+    },
+    {
+      "step": "step_5",
+      "status": "completed",
+      "timestamp": "2025-11-19T00:05:00.000Z",
+      "summary": "Source tree documented"
+    },
+    {
+      "step": "step_6",
+      "status": "completed",
+      "timestamp": "2025-11-19T00:06:00.000Z",
+      "summary": "Dev setup and deployment guides written"
+    },
+    {
+      "step": "step_7",
+      "status": "skipped",
+      "timestamp": "2025-11-19T00:07:00.000Z",
+      "summary": "No multi-part integration (single monolith)"
+    },
+    {
+      "step": "step_8",
+      "status": "completed",
+      "timestamp": "2025-11-19T00:08:00.000Z",
+      "summary": "Architecture documentation written"
+    },
+    {
+      "step": "step_9",
+      "status": "completed",
+      "timestamp": "2025-11-19T00:09:00.000Z",
+      "summary": "All supporting docs written"
+    },
+    {
+      "step": "step_10",
+      "status": "completed",
+      "timestamp": "2025-11-19T00:10:00.000Z",
+      "summary": "Master index generated"
+    },
+    {
+      "step": "step_11",
+      "status": "completed",
+      "timestamp": "2025-11-19T00:10:00.000Z",
+      "summary": "Validation complete - all docs generated"
+    },
+    {
+      "step": "step_12",
+      "status": "completed",
+      "timestamp": "2025-11-19T00:10:00.000Z",
+      "summary": "Workflow complete"
+    }
+  ],
+  "current_step": "completed",
+  "findings": {
+    "project_classification": "Monolithic Next.js web application with AWS Cognito 2FA authentication",
+    "technology_stack": "Next.js 16.0.3, React 19.2.0, TypeScript 5.x, Tailwind CSS 4.x, AWS Cognito",
+    "components_count": 10,
+    "pages_count": 6,
+    "services_count": 1,
+    "types_count": 1
+  },
+  "project_types": [
+    {
+      "part_id": "main",
+      "project_type_id": "web",
+      "display_name": "Next.js AWS 2FA Application"
+    }
+  ],
+  "outputs_generated": [
+    "project-scan-report.json",
+    "project-overview.md",
+    "architecture.md",
+    "source-tree-analysis.md",
+    "component-inventory.md",
+    "data-models.md",
+    "development-guide.md",
+    "index.md"
+  ],
+  "resume_instructions": "Workflow completed successfully"
+}
